@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  moderation:
+    build: .
+    ports:
+      - "3100:3100"
+    environment:
+      PORT: 3100
+      HOST: 0.0.0.0
+      LOG_LEVEL: debug
+      MODEL_PROVIDER: nsfwjs
+      REJECT_THRESHOLD: 0.80
+      FLAG_THRESHOLD: 0.50
+      SEXY_WEIGHT: 0.70
+      DEFAULT_FRAME_COUNT: 5
+      MAX_VIDEO_DURATION_SECONDS: 300
+      FFMPEG_PATH: /usr/bin/ffmpeg
+      MAX_FILE_SIZE_MB: 50
+      ALLOWED_IMAGE_TYPES: "image/jpeg,image/png,image/webp"
+      ALLOWED_VIDEO_TYPES: "video/mp4,video/quicktime,video/webm"
+      # API_KEY: your-secret-key
+    volumes:
+      - model_cache:/root/.cache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+volumes:
+  model_cache:

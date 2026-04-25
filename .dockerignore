@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+*.env.local
+.claude
+tests
+vitest.config.ts
+eslint.config.mjs
+.pnpmfile.cjs
+docker-compose.yml
+.dockerignore
+coverage
+model_cache
