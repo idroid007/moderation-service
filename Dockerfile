@@ -1,7 +1,7 @@
 # ── Stage 1: build ────────────────────────────────────────────────────────────
 FROM node:20-slim AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends ffmpeg curl \
   && rm -rf /var/lib/apt/lists/*
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
 WORKDIR /app
 
