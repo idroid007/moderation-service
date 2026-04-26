@@ -4,7 +4,8 @@
       "WebFetch(domain:news.ycombinator.com)",
       "WebFetch(domain:medium.com)",
       "Bash(mv .pnpmfile.cjs .pnpmfile.cjs.bak)",
-      "Bash(pnpm install *)"
+      "Bash(pnpm install *)",
+      "Bash(pnpm add *)"
     ]
   }
 }
