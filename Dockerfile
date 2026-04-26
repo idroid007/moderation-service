@@ -34,7 +34,8 @@ COPY --from=builder /app/dist ./dist
 # Pre-download the nsfwjs model into /app/model_cache at build time so the
 # container never needs outbound internet access at runtime.
 # MODEL_PATH env var tells the classifier to load from this directory.
-ENV MODEL_PATH=/app/model_cache
+ENV NODE_ENV=production \
+    MODEL_PATH=/app/model_cache
 RUN node -e " \
   process.env.MODEL_PATH = '/app/model_cache'; \
   const tf = require('@tensorflow/tfjs'); \
