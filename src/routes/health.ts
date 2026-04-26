@@ -1,9 +1,13 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 import { getClassifier } from "../services/classifier.js";
 
 const startTime = Date.now();
 
 export async function healthRoutes(app: FastifyInstance): Promise<void> {
+  app.get("/", async (_request: FastifyRequest, reply) => {
+    return reply.redirect("https://hiresocials.com", 301);
+  });
+
   app.get("/health", async (_request, reply) => {
     let modelLoaded = false;
     try {

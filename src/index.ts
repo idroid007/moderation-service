@@ -43,6 +43,14 @@ async function bootstrap() {
   await app.register(moderateImageRoutes);
   await app.register(moderateVideoRoutes);
 
+  // Redirect all unmatched GET requests to hiresocials.com
+  app.setNotFoundHandler(async (request, reply) => {
+    if (request.method === "GET") {
+      return reply.redirect("https://hiresocials.com", 301);
+    }
+    return reply.code(404).send({ error: "Not found", code: "NOT_FOUND" });
+  });
+
   // Global error handler
   app.setErrorHandler(async (error: FastifyError, _request, reply) => {
     if (error.statusCode === 413) {
