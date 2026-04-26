@@ -1,16 +1,30 @@
-import Fastify from "fastify";
+import pino from "pino";
 import { config } from "../config.js";
 
-// Standalone logger for pre-server use (model loading, startup).
-// Uses Fastify's bundled pino so no extra pino dependency is needed.
-const _app = Fastify({
-  logger: {
-    level: config.LOG_LEVEL,
-    transport:
-      process.env.NODE_ENV !== "production"
-        ? { target: "pino-pretty", options: { colorize: true } }
-        : undefined,
-  },
-});
+const isProd = process.env.NODE_ENV === "production";
+const lokiHost = process.env.LOKI_HOST;
+const lokiUser = process.env.LOKI_USER;
+const lokiToken = process.env.LOKI_TOKEN;
 
-export const logger = _app.log;
+const lokiEnabled = isProd && lokiHost && lokiUser && lokiToken;
+
+export const logger = pino({
+  level: config.LOG_LEVEL,
+  transport: lokiEnabled
+    ? {
+        target: "pino-loki",
+        options: {
+          host: lokiHost,
+          basicAuth: { username: lokiUser, password: lokiToken },
+          batching: true,
+          interval: 5,
+          labels: {
+            service: "moderation-service",
+            env: process.env.NODE_ENV ?? "production",
+          },
+        },
+      }
+    : !isProd
+      ? { target: "pino-pretty", options: { colorize: true } }
+      : undefined,
+});

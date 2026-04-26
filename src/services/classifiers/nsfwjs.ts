@@ -33,7 +33,7 @@ export class NsfwjsClassifier implements Classifier {
         : `file://${config.MODEL_PATH}/`;
     }
 
-    this.model = await nsfw.load(modelUrl, { size: 299 });
+    this.model = await nsfw.load(modelUrl, { size: 224 });
   }
 
   async classify(imageBuffer: Buffer): Promise<ClassifierScores> {
@@ -45,7 +45,7 @@ export class NsfwjsClassifier implements Classifier {
     // nsfwjs.classify() accepts an HTMLImageElement in the browser; in Node.js
     // we construct the tensor directly and call classify() on it.
     const { data, info } = await sharp(imageBuffer)
-      .resize(299, 299, { fit: "cover" })
+      .resize(224, 224, { fit: "cover" })
       .removeAlpha()
       .raw()
       .toBuffer({ resolveWithObject: true });
