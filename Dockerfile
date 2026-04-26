@@ -15,9 +15,9 @@ RUN pnpm build
 # ── Stage 2: runtime ──────────────────────────────────────────────────────────
 FROM node:20-slim AS runtime
 
-# ffmpeg for video frame extraction, curl for health check
+# ffmpeg for video, curl for health check, python3/make/g++ for tfjs-node native bindings
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ffmpeg curl \
+  && apt-get install -y --no-install-recommends ffmpeg curl python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 
 RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
@@ -31,25 +31,7 @@ RUN pnpm install --frozen-lockfile --prod
 # Compiled JS from builder
 COPY --from=builder /app/dist ./dist
 
-# Pre-download the nsfwjs model into /app/model_cache at build time so the
-# container never needs outbound internet access at runtime.
-# MODEL_PATH env var tells the classifier to load from this directory.
-ENV NODE_ENV=production \
-    MODEL_PATH=/app/model_cache
-RUN node -e " \
-  process.env.MODEL_PATH = '/app/model_cache'; \
-  const tf = require('@tensorflow/tfjs'); \
-  require('@tensorflow/tfjs-backend-wasm'); \
-  const nsfw = require('nsfwjs'); \
-  tf.setBackend('wasm').then(() => tf.ready()).then(() => \
-    nsfw.load(undefined, { size: 299 }) \
-  ).then(() => { \
-    console.log('Model pre-cached to /app/model_cache'); \
-    process.exit(0); \
-  }).catch(e => { \
-    console.warn('Pre-cache skipped (will fetch at runtime):', e.message); \
-    process.exit(0); \
-  })" || true
+ENV NODE_ENV=production
 
 EXPOSE 3100
 

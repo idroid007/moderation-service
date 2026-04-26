@@ -1,5 +1,5 @@
+import "@tensorflow/tfjs-node";
 import * as tf from "@tensorflow/tfjs";
-import "@tensorflow/tfjs-backend-wasm";
 import * as nsfw from "nsfwjs";
 import sharp from "sharp";
 import { config } from "../../config.js";
@@ -20,8 +20,6 @@ export class NsfwjsClassifier implements Classifier {
   private model: nsfw.NSFWJS | null = null;
 
   async load(): Promise<void> {
-    // Use WASM backend — no native binaries required, works on any Node version
-    await tf.setBackend("wasm");
     await tf.ready();
 
     // nsfw.load() expects a URL string or undefined (uses TF Hub default).

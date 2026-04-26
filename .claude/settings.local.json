@@ -6,7 +6,12 @@
       "Bash(mv .pnpmfile.cjs .pnpmfile.cjs.bak)",
       "Bash(pnpm install *)",
       "Bash(pnpm add *)",
-      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('deps:', Object.keys\\(p.dependencies\\).filter\\(k=>k.startsWith\\('pino'\\)\\)\\); console.log\\('devDeps:', Object.keys\\(p.devDependencies\\).filter\\(k=>k.startsWith\\('pino'\\)\\)\\)\")"
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('deps:', Object.keys\\(p.dependencies\\).filter\\(k=>k.startsWith\\('pino'\\)\\)\\); console.log\\('devDeps:', Object.keys\\(p.devDependencies\\).filter\\(k=>k.startsWith\\('pino'\\)\\)\\)\")",
+      "Bash(pnpm remove *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\(p.pnpm,null,2\\)\\)\")",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm rebuild *)",
+      "Bash(pnpm dev *)"
     ]
   }
 }
