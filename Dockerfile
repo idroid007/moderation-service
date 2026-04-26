@@ -33,13 +33,13 @@ COPY --from=builder /app/dist ./dist
 
 ENV NODE_ENV=production
 
-EXPOSE 3100
+EXPOSE ${PORT:-5455}
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
-  CMD curl -fsS http://localhost:3100/health || exit 1
+  CMD curl -fsS http://localhost:${PORT:-5455}/health || exit 1
 
 # Run as non-root
 RUN useradd -r -s /bin/false appuser && chown -R appuser /app
 USER appuser
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "--max-old-space-size=512", "dist/index.js"]
