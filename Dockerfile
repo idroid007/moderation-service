@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml .pnpmfile.cjs ./
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY tsconfig.json ./
@@ -25,7 +25,7 @@ RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 WORKDIR /app
 
 # Production deps only
-COPY package.json pnpm-lock.yaml .pnpmfile.cjs ./
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
 # Compiled JS from builder
